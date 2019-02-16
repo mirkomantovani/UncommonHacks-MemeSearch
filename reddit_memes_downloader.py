@@ -6,6 +6,7 @@ counter = 0
 
 
 def getPosts(subreddit, postLimit):
+    print('getPosts')
     url = 'http://www.reddit.com/r/' + subreddit + '/.json?limit=' + str(postLimit)
     headers = {
     'User-Agent': 'Reddit Wallpaper Scraper 1.0'
@@ -22,8 +23,10 @@ def getPosts(subreddit, postLimit):
 
 
 def saveImages(posts, scoreLimit, save_dir='reddit_memes'):
+    print('saveImages')
     for post in posts:
         url = post['data']['url']
+        print(url)
         score = post['data']['score']
         title = post['data']['title']
         if 'i.imgur.com' in url and score > scoreLimit:
@@ -34,11 +37,14 @@ def saveImage(url, title, save_dir='reddit_memes'):
     global counter
     save_dir = makeSaveDir(save_dir)
     dot_location = url.rfind('.')
-    filename = (save_dir + title.replace('/', ':') + url[dot_location: dot_location + 4]).encode('utf-8')
+    print(title)
+    print(url)
+    filename = './' + save_dir+title
+    # filename = (save_dir + title.replace('/', ':') + url[dot_location: dot_location + 4]).encode('utf-8')
     if not os.path.exists(filename):
         # print('Saving ' + filename + '!\n')
         counter += 1
-        urllib.urlretrieve(url, filename)
+        urllib.request.urlretrieve(url, filename)
 
 
 def makeSaveDir(dir):
@@ -59,8 +65,8 @@ def main():
         downloadImagesFromReddit(sys.argv[1:])
     else:
         downloadImagesFromReddit([
-            'MinimalWallpaper',
-            'wallpapers'
+            'AdviceAnimals',
+            'memes'
         ])
 
 if __name__ == '__main__':
