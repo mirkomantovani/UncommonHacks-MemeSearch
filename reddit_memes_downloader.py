@@ -1,6 +1,9 @@
 import requests, urllib
 import os, sys, time
 import urllib.request
+from inverted_index_builder import build_inverted_index
+import pickle
+import ocr
 
 counter = 0
 
@@ -71,6 +74,8 @@ def makeSaveDir(dir):
     return dir + '/'
 
 
+# Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
+# subreddit with a limit of postLimit
 def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=10, scoreLimit=20):
     for subreddit in subreddits:
         posts = getPosts(subreddit, postLimit)
@@ -83,12 +88,22 @@ def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=10, scoreLi
 
 def main():
     if len(sys.argv) > 1:
-        downloadImagesFromReddit(sys.argv[1:])
+        meme_urls = downloadImagesFromReddit(sys.argv[1:])
     else:
-        downloadImagesFromReddit([
-            'AdviceAnimals',
-            'memes'
-        ])
+        meme_urls = downloadImagesFromReddit(['AdviceAnimals','memes'])
+
+
+    # API calls to Google Vision API of GCP
+    dictionary_memes = ocr.process_image_urls(meme_urls)
+
+    # Building inverted index
+    inverted_index = build_inverted_index(meme_urls)
+
+    # Storing inverted index with pickle
+    with open('memes_inverted_index.pickle', 'wb') as handle:
+        pickle.dump(inverted_index, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
 
 if __name__ == '__main__':
     main()

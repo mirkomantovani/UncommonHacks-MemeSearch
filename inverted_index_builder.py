@@ -17,7 +17,7 @@ def build_inverted_index(texts_list):
 
     for doc in range(n_images):
         for word in documents[doc]:
-            inverted_index.setdefault(word, {})[doc + 1] = inverted_index.setdefault(word, {}).get(doc + 1, 0) + 1
+            inverted_index.setdefault(word, {})[doc] = inverted_index.setdefault(word, {}).get(doc, 0) + 1
 
 
     # document frequency = number of docs containing a specific word, dictionary with key = word, value = num of docs
