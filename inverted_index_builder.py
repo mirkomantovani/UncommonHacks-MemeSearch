@@ -5,6 +5,13 @@ import math
 # my inverted index is a python dictionary whose key are the words, it retrieves another dictionary indexed with
 # doc number
 
+# document frequency = number of docs containing a specific word, dictionary with key = word, value = num of docs
+df = {}
+# inverse document frequency
+idf = {}
+
+inverted_index = {}
+
 # texts_list
 def build_inverted_index(meme_dict):
 
@@ -23,30 +30,47 @@ def build_inverted_index(meme_dict):
     #         inverted_index.setdefault(word, {})[doc] = inverted_index.setdefault(word, {}).get(doc, 0) + 1
 
     # Approach with dictionary
-    documents = []
+    # documents = []
 
     for url in meme_dict.keys():
         meme_dict[url] = preprocess(meme_dict[url])
 
-    n_images = len(documents)
+    n_images = len(meme_dict.keys())
 
-    inverted_index = {}
+    # print('len images')
+    # print(n_images)
+
+
     for url in meme_dict.keys():
         for word in meme_dict[url]:
             inverted_index.setdefault(word, {})[url] = inverted_index.setdefault(word, {}).get(url, 0) + 1
 
+
+    for key in inverted_index.keys():
+        df[key] = len(inverted_index[key].keys())
+        # print('len images2')
+        #
+        # print(n_images)
+        # print(n_images / df[key])
+        idf[key] = math.log(n_images / df[key], 2)
+
+    for word in inverted_index:
+        for doc_key in inverted_index[word]:
+            inverted_index[word][doc_key] = tf_idf(word, doc_key)
+
     return inverted_index
 
 
-    # document frequency = number of docs containing a specific word, dictionary with key = word, value = num of docs
+
+
+
+    # # document frequency = number of docs containing a specific word, dictionary with key = word, value = num of docs
     # df = {}
     # # inverse document frequency
     # idf = {}
-    #
-    # for key in inverted_index.keys():
-    #     df[key] = len(inverted_index[key].keys())
-    #     idf[key] = math.log(n_images / df[key], 2)
-    #
-    #
-    # def tf_idf(word, doc):
-    #     return inverted_index[word][doc] * idf[word]
+
+
+
+
+def tf_idf(word, doc):
+    return inverted_index[word][doc] * idf[word]

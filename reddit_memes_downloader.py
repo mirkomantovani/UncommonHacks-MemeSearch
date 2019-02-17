@@ -9,7 +9,7 @@ counter = 0
 
 
 def getPosts(subreddit, postLimit):
-    print('getPosts')
+    # print('getPosts')
     url = 'http://www.reddit.com/r/' + subreddit + '/.json?limit=' + str(postLimit)
     headers = {
     'User-Agent': 'Reddit Wallpaper Scraper 1.0'
@@ -26,10 +26,10 @@ def getPosts(subreddit, postLimit):
 
 
 def saveImages(posts, scoreLimit, save_dir='reddit_memes'):
-    print('saveImages')
+    # print('saveImages')
     for post in posts:
         url = post['data']['url']
-        print(url)
+        # print(url)
         score = post['data']['score']
         title = post['data']['title']
         if 'i.imgur.com' in url and score > scoreLimit:
@@ -37,11 +37,11 @@ def saveImages(posts, scoreLimit, save_dir='reddit_memes'):
 
 
 def extractURLs(posts, scoreLimit, save_dir='reddit_memes'):
-    print('extract URLS')
+    # print('extract URLS')
     images_urls = []
     for post in posts:
         url = post['data']['url']
-        print(url)
+        # print(url)
         score = post['data']['score']
         title = post['data']['title']
         allowed_suffixes = (".png", ".jpg", ".gif")
@@ -76,14 +76,14 @@ def makeSaveDir(dir):
 
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
 # subreddit with a limit of postLimit
-def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=10, scoreLimit=20):
+def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=100, scoreLimit=20):
     for subreddit in subreddits:
         posts = getPosts(subreddit, postLimit)
         # we don't need to store images, just need the URLs to make a request to google vision API
         memes_urls = extractURLs(posts, scoreLimit, subreddit.lower())
         # saveImages(posts, scoreLimit, subreddit.lower())
     print(str(len(memes_urls)) + ' images have been scraped!')
-    print(memes_urls)
+    # print(memes_urls)
     return memes_urls
 
 
@@ -100,7 +100,7 @@ def main():
     # Building inverted index
     inverted_index = build_inverted_index(dictionary_memes)
 
-    print(inverted_index)
+    # print(inverted_index)
 
     # Storing inverted index with pickle
     # with open('memes_inverted_index.pickle', 'wb') as handle:
