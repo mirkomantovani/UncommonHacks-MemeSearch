@@ -12,14 +12,21 @@ def process_image_urls(urls):
                         'image_context': {"language_hints": ['en']}}
         requests.append(request)
     response = image_client.batch_annotate_images(requests)
-    for counter, url in urls:
+    for counter, url in enumerate(urls):
         results[url] = response.responses[counter].full_text_annotation.text
-        # results.append({'id': counter,
-        #                 'url': url,
-        #                 'text': response.full_text_annotation.text})
     return results
 
-def pickle_results(results):
-    with open('results.pickle', 'wb') as f:
-        pickle.dump(results, f, pickle.HIGHEST_PROTOCOL)
+#urls = [
+#            'https://i.redd.it/dfhv8xzspif21.jpg',
+#            'https://i.redd.it/9834v131uyd21.jpg',
+#            'https://i.redd.it/8tva97jmksf21.jpg',
+#            'https://i.redd.it/5s65b1xh7gc21.jpg',
+#            'https://i.redd.it/h31caipsume21.jpg',
+#            'https://i.imgur.com/kesnukh.jpg',
+#            'https://i.redd.it/5sjwxk03lbg21.jpg',
+#            'https://i.redd.it/3cybnjz9a7b21.jpg',
+#            'https://i.redd.it/h5euiwba1ff21.jpg',
+#            'https://i.imgur.com/b1rmBnp.jpg']
+
+#print(process_image_urls(urls))
 
