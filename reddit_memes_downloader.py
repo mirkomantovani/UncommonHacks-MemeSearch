@@ -38,7 +38,7 @@ def extractURLs(urls):
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
 # subreddit with a limit of postLimit
 def get_img_urls_from_subreddit(subreddit = 'AdviceAnimals'):
-    urls = getPosts(subreddit, 1000)
+    urls = getPosts(subreddit, 100)
     img_urls = extractURLs(urls)
     print(len(img_urls))
     return img_urls
