@@ -11,13 +11,14 @@ def process_image_urls(urls):
     requests = []
     results = {}
     chunked_urls = chunks(urls)
-    for chunk in chunked_urls:
+    for counter, chunk in enumerate(chunked_urls):
         for url in chunk:
             request = {'image': {'source': {'image_uri': url}},
                        'features': [{'type': vision.enums.Feature.Type.TEXT_DETECTION}],
                        'image_context': {"language_hints": ['en']}}
             requests.append(request)
         response = image_client.batch_annotate_images(requests)
+        print(f'request {counter}')
         for counter, url in enumerate(chunk):
             results[url] = response.responses[counter].full_text_annotation.text
         requests.clear()

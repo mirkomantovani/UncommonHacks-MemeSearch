@@ -31,8 +31,6 @@ def extractURLs(urls):
         # print(url)
         if url.endswith(allowed_suffixes):
             images_urls.append(url)
-        else:
-            print('not in allowed suffixes')
     return images_urls
 
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
