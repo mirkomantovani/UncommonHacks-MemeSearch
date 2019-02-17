@@ -35,7 +35,7 @@ def extractURLs(urls):
 
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
 # subreddit with a limit of postLimit
-def get_img_urls_from_subreddit(subreddits=['AdviceAnimals'], n=10):
+def get_img_urls_from_subreddit(subreddits=['AdviceAnimals', 'MemeEconomy', 'ProgrammerHumor'], n=700):
     urls = set()
     for subreddit in subreddits:
         print(f'requests to /r/{subreddit}')
@@ -60,7 +60,7 @@ def main():
     # Building inverted index
     inverted_index = build_inverted_index(dictionary_memes)
 
-    # print(inverted_index)
+    print(inverted_index)
 
     # Storing inverted index with pickle
     with open('memes_inverted_index.pickle', 'wb') as handle:

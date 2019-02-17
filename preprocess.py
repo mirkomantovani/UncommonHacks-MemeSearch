@@ -34,9 +34,11 @@ def preprocess(doc):
     # Splitting on whitespaces
     doc = doc.split()
 
+    # Converting all words to lowercase
+    doc = [x.lower() for x in doc]
+
     # Stop word elimination
     doc = [s for s in doc if s not in stop_words]
-
     # Porter Stemmer
     doc = list(map(stem, doc))
 
@@ -53,10 +55,5 @@ def preprocess(doc):
     # Removing empty words
     doc = [s for s in doc if s]
 
-    # Removing words with len less or equal to 2
-    # doc = [s for s in doc if not lesseq_two_letters(s)]
-
-    # Converting all words to lowercase
-    doc = [x.lower() for x in doc]
 
     return doc
