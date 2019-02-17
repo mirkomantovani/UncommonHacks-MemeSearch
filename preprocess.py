@@ -40,6 +40,9 @@ def preprocess(doc):
     # Porter Stemmer
     doc = list(map(stem, doc))
 
+    # Applying stop word elimination again
+    doc = [s for s in doc if s not in stop_words]
+
 
     # Removing punctuations in words
     doc = [''.join(c for c in s if c not in string.punctuation) for s in doc]
