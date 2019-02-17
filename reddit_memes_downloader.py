@@ -8,9 +8,12 @@ import ocr
 counter = 0
 
 
-def getPosts(subreddit, postLimit):
+def getPosts(subreddit, postLimit, after):
     # print('getPosts')
-    url = 'http://www.reddit.com/r/' + subreddit + '/.json?limit=' + str(postLimit)
+    if after:
+        url = 'http://www.reddit.com/r/' + subreddit + '/.json?limit=' + str(postLimit) + '&after=' + after
+    else:
+        url = 'http://www.reddit.com/r/' + subreddit + '/.json?limit=' + str(postLimit)
     headers = {
     'User-Agent': 'Reddit Wallpaper Scraper 1.0'
     }
@@ -19,7 +22,7 @@ def getPosts(subreddit, postLimit):
         data = r.json()
         print('Sleeping for 1 seconds...\n')
         time.sleep(1)
-        return data['data']['children']
+        return data['data']['children'], data['data']['after']
     else:
         print('Sorry, but there was an error retrieving the subreddit\'s data!')
         return None
@@ -76,12 +79,18 @@ def makeSaveDir(dir):
 
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
 # subreddit with a limit of postLimit
-def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=100, scoreLimit=20):
-    for subreddit in subreddits:
-        posts = getPosts(subreddit, postLimit)
-        # we don't need to store images, just need the URLs to make a request to google vision API
-        memes_urls = extractURLs(posts, scoreLimit, subreddit.lower())
-        # saveImages(posts, scoreLimit, subreddit.lower())
+def downloadImagesFromReddit(subreddit = 'AdviceAnimals', postLimit=100, scoreLimit=20):
+    all_posts = []
+    after = None
+    for i in range(10):
+        posts, after = getPosts(subreddit, postLimit, after)
+        all_posts += posts
+    print(len(all_posts))
+    # print(after)
+    # print(posts[0]['data']['after'])
+    # we don't need to store images, just need the URLs to make a request to google vision API
+    memes_urls = extractURLs(all_posts, scoreLimit, subreddit.lower())
+    # saveImages(posts, scoreLimit, subreddit.lower())
     print(str(len(memes_urls)) + ' images have been scraped!')
     # print(memes_urls)
     return memes_urls
@@ -91,9 +100,9 @@ def main():
     if len(sys.argv) > 1:
         meme_urls = downloadImagesFromReddit(sys.argv[1:])
     else:
-        meme_urls = downloadImagesFromReddit(['AdviceAnimals','memes'])
+        meme_urls = downloadImagesFromReddit('AdviceAnimals')
 
-
+    # quit(23)
     # API calls to Google Vision API of GCP
     dictionary_memes = ocr.process_image_urls(meme_urls)
 
@@ -103,8 +112,8 @@ def main():
     # print(inverted_index)
 
     # Storing inverted index with pickle
-    # with open('memes_inverted_index.pickle', 'wb') as handle:
-    #     pickle.dump(inverted_index, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open('memes_inverted_index.pickle', 'wb') as handle:
+        pickle.dump(inverted_index, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 
