@@ -50,7 +50,7 @@ def main():
     else:
         meme_urls = get_img_urls_from_subreddit('AdviceAnimals')
 
-
+    # quit(23)
     # API calls to Google Vision API of GCP
     dictionary_memes = ocr.process_image_urls(meme_urls)
 
