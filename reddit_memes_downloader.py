@@ -38,6 +38,7 @@ def extractURLs(urls):
 def get_img_urls_from_subreddit(subreddits=['AdviceAnimals'], n=10):
     urls = set()
     for subreddit in subreddits:
+        print(f'requests to /r/{subreddit}')
         urls = urls.union(getPosts(subreddit, n))
     img_urls = extractURLs(urls)
     print(len(img_urls))
@@ -45,8 +46,10 @@ def get_img_urls_from_subreddit(subreddits=['AdviceAnimals'], n=10):
 
 
 def main():
+    for arg in sys.argv:
+        print(arg)
     if len(sys.argv) > 1:
-        meme_urls = get_img_urls_from_subreddit(sys.argv[1:])
+        meme_urls = get_img_urls_from_subreddit(n=int(sys.argv[1]), subreddits=sys.argv[2:])
     else:
         meme_urls = get_img_urls_from_subreddit()
 
