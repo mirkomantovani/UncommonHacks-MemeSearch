@@ -1,6 +1,7 @@
 # # Inverted Index
 from preprocess import preprocess
 import math
+import pickle
 
 # my inverted index is a python dictionary whose key are the words, it retrieves another dictionary indexed with
 # doc number
@@ -53,6 +54,11 @@ def build_inverted_index(meme_dict):
         # print(n_images)
         # print(n_images / df[key])
         idf[key] = math.log(n_images / df[key], 2)
+
+        # store idf
+
+    with open('idf.pickle', 'wb') as handle:
+        pickle.dump(idf, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     for word in inverted_index:
         for doc_key in inverted_index[word]:

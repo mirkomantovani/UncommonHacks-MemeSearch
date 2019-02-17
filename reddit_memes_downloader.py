@@ -82,7 +82,7 @@ def makeSaveDir(dir):
 def downloadImagesFromReddit(subreddit = 'AdviceAnimals', postLimit=100, scoreLimit=20):
     all_posts = []
     after = None
-    for i in range(10):
+    for i in range(3):
         posts, after = getPosts(subreddit, postLimit, after)
         all_posts += posts
     print(len(all_posts))
