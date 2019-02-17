@@ -1,18 +1,19 @@
 from google.cloud import vision
 import pickle
 
-image_client = vision.ImageAnnotatorClient.from_service_account_file('/Users/jayu/Documents/dev/uncommonhacks2019/credentials/uncommonhacks-memesearch-7a7faabf16ff.json')
+image_client = vision.ImageAnnotatorClient.from_service_account_file('uncommonhacks-memesearch-7a7faabf16ff.json')
 
 def process_image_urls(urls):
-    results = []
+    results = {}
     for counter, url in enumerate(urls):
         request = {'image': {'source': {'image_uri': url}},
                         'features': [{'type': vision.enums.Feature.Type.TEXT_DETECTION}],
                         'image_context': {"language_hints": ['en']}}
         response = image_client.annotate_image(request)
-        results.append({'id': counter,
-                        'url': url,
-                        'text': response.full_text_annotation.text})
+        results[url] = response.full_text_annotation.text
+        # results.append({'id': counter,
+        #                 'url': url,
+        #                 'text': response.full_text_annotation.text})
     return results
 
 def pickle_results(results):

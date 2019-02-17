@@ -84,6 +84,7 @@ def downloadImagesFromReddit(subreddits = 'AdviceAnimals', postLimit=10, scoreLi
         # saveImages(posts, scoreLimit, subreddit.lower())
     print(str(len(memes_urls)) + ' images have been scraped!')
     print(memes_urls)
+    return memes_urls
 
 
 def main():
@@ -97,11 +98,13 @@ def main():
     dictionary_memes = ocr.process_image_urls(meme_urls)
 
     # Building inverted index
-    inverted_index = build_inverted_index(meme_urls)
+    inverted_index = build_inverted_index(dictionary_memes)
+
+    print(inverted_index)
 
     # Storing inverted index with pickle
-    with open('memes_inverted_index.pickle', 'wb') as handle:
-        pickle.dump(inverted_index, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    # with open('memes_inverted_index.pickle', 'wb') as handle:
+    #     pickle.dump(inverted_index, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 
