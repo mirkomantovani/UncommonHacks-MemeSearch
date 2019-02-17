@@ -35,8 +35,10 @@ def extractURLs(urls):
 
 # Calls Reddit API, retrieves JSON file, parses it and gets all urls in the specified
 # subreddit with a limit of postLimit
-def get_img_urls_from_subreddit(subreddit = 'AdviceAnimals'):
-    urls = getPosts(subreddit, 100)
+def get_img_urls_from_subreddit(subreddits=['AdviceAnimals'], n=10):
+    urls = set()
+    for subreddit in subreddits:
+        urls = urls.union(getPosts(subreddit, n))
     img_urls = extractURLs(urls)
     print(len(img_urls))
     return img_urls
@@ -44,9 +46,9 @@ def get_img_urls_from_subreddit(subreddit = 'AdviceAnimals'):
 
 def main():
     if len(sys.argv) > 1:
-        meme_urls = get_img_urls_from_subreddit(sys.argv[1])
+        meme_urls = get_img_urls_from_subreddit(sys.argv[1:])
     else:
-        meme_urls = get_img_urls_from_subreddit('AdviceAnimals')
+        meme_urls = get_img_urls_from_subreddit()
 
     # quit(23)
     # API calls to Google Vision API of GCP
