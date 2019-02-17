@@ -48,14 +48,4 @@ print(sorted_ranking)
 
 
 
-# def query_length(query):
-#     length = 0
-#     cnt = Counter()
-#     for w in query:
-#         cnt[w] += 1
-#     for w in cnt.keys():
-#         length += (cnt[w]*idf.get(w, 0)) ** 2
-#     return math.sqrt(length)
-
-
 
